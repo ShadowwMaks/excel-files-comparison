@@ -24,7 +24,10 @@ namespace PdfCreate
                 {
                     FI = new FileInfo(findedFile);
                     listOfPJpgs.Add(new List<string>());
-                    listOfPJpgs[i][0] = FI.Name;
+                    listOfPJpgs[i].Add(" ");
+                    listOfPJpgs[i].Add(" ");
+                    string[] names = FI.Name.Split(' ', '.');
+                    listOfPJpgs[i][0] = names[1];
                     listOfPJpgs[i][1] = FI.FullName;
                     i++;
                 }
