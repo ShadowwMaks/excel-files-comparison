@@ -79,5 +79,12 @@ namespace PdfCreate
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
+
+        public void getWholeColumn()
+        {
+            var xlWorksheet = (Excel.Worksheet)_workbook.Worksheets.get_Item(1);
+
+            object[] columnValue = xlWorksheet.Range["C"].Value2;
+        }
     }
 }
