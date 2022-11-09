@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="PdfCreate.MainForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PdfCreate"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Button Content="Выберите файл эксель" HorizontalAlignment="Left" Margin="53,205,0,0" VerticalAlignment="Top" Width="338" Height="155" RenderTransformOrigin="0.479,0.506" Click="Button_Click"/>
+        <TextBox Name="FileName" HorizontalAlignment="Left" Height="62" Margin="190,95,0,0" TextWrapping="Wrap" Text="Выбранный файл" VerticalAlignment="Top" Width="437"/>
+        <Button Content="Выбрать папку изображений" HorizontalAlignment="Left" Margin="435,205,0,0" VerticalAlignment="Top" Width="338" Height="155" RenderTransformOrigin="0.479,0.506" Click="Folder_Dialog"/>
+
+    </Grid>
+</UserControl>

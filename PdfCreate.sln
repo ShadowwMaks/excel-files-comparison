@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32929.385
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project1", "Project1.csproj", "{E2365216-965B-4930-BDA0-155A8F455417}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfCreate", "PdfCreate.csproj", "{E2365216-965B-4930-BDA0-155A8F455417}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
