@@ -85,7 +85,10 @@ namespace PdfCreate
                 {
                     FI = new FileInfo(findedFile);
                     listOfPJpgs.Add(new List<string>());
-                    listOfPJpgs[i][0] = FI.Name;
+                    listOfPJpgs[i].Add(" ");
+                    listOfPJpgs[i].Add(" ");
+                    string[] names = FI.Name.Split(' ', '.');
+                    listOfPJpgs[i][0] = names[1];
                     listOfPJpgs[i][1] = FI.FullName;
                     i++;
                 }
@@ -96,7 +99,7 @@ namespace PdfCreate
             {
                 using (ExcelHelper helper = new ExcelHelper())
                 {
-                    if (helper.Open(filePath: System.IO.Path.Combine(catalog, "Test.xlsx")))
+                    if (helper.Open(filePath: Path.Combine(catalog, "Test.xlsx")))
                     {
                         i = 1;
                         while (true)
