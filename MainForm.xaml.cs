@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Aspose.Words;
 
 namespace PdfCreate
 {
@@ -71,10 +72,10 @@ namespace PdfCreate
             }
         }
 
-        static void ProgramLogic(string[] args)
+        void ProgramLogic(string[] args)
         {
-            string catalog = Environment.CurrentDirectory, currentSheet = null;
-            int i = 0;
+            string catalog = _folderPath, file = _excelFilePath, currentSheet = null;
+            int n = 0;
             List<string> listNeededJpgs = new List<string>();
             List<List<string>> listOfPJpgs = new List<List<string>>();
 
@@ -85,28 +86,52 @@ namespace PdfCreate
                 {
                     FI = new FileInfo(findedFile);
                     listOfPJpgs.Add(new List<string>());
-                    listOfPJpgs[i].Add(" ");
-                    listOfPJpgs[i].Add(" ");
+                    listOfPJpgs[n].Add(" ");
+                    listOfPJpgs[n].Add(" ");
                     string[] names = FI.Name.Split(' ', '.');
-                    listOfPJpgs[i][0] = names[1];
-                    listOfPJpgs[i][1] = FI.FullName;
-                    i++;
+                    listOfPJpgs[n][0] = names[1];
+                    listOfPJpgs[n][1] = FI.FullName;
+                    n++;
                 }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
             }
 
             try
             {
+                var doc = new Document();
+                var builder = new DocumentBuilder(doc);
                 using (ExcelHelper helper = new ExcelHelper())
                 {
-                    if (helper.Open(filePath: Path.Combine(catalog, "Test.xlsx")))
+                    if (helper.Open(filePath: file))
                     {
-                        i = 1;
+                        int i = 1;
                         while (true)
                         {
                             try
                             {
                                 helper.Get(sheetNum: i, listNeededJpgs, currentSheet);
+                                var fileNames = new List<string> { };
+
+                                foreach (string need in listNeededJpgs)
+                                {
+                                    for (int j = 0; j <= n; j++)
+                                    {
+                                        if(need == listOfPJpgs[j][0])
+                                        {
+                                            fileNames.Add(listOfPJpgs[j][1]);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                foreach (string fileName in fileNames)
+                                {
+                                    builder.InsertImage(fileName);
+                                    builder.Writeln();
+                                }
+
+                                doc.Save(currentSheet + ".pdf");
+
                             }
                             catch (Exception ex) { Console.WriteLine(ex.Message); break; }
                         }

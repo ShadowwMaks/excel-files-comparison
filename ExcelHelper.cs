@@ -65,7 +65,23 @@ namespace PdfCreate
             {
                 ObjWorkSheet = (Excel.Worksheet)_workbook.Sheets[sheetNum];
                 currentSheet = ObjWorkSheet.Name;
-                /*как-то надо выбрать правильный столбец и получить номера*/
+                string data;
+                int i = 11;
+                while (true)
+                {
+                    char[] separators = new char[] { ' ', '.' , 'Д'};
+                    data = ObjWorkSheet.Cells[i, "F"];
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        string[] num = data.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                        listNeededJpgs.Add(num[0]);
+                        i++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 return true;
             }
             catch(Exception ex) { Console.WriteLine(ex.Message); }
@@ -80,7 +96,7 @@ namespace PdfCreate
             catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
-        public void getWholeColumn()
+        public void GetWholeColumn()
         {
             var xlWorksheet = (Excel.Worksheet)_workbook.Worksheets.get_Item(1);
 
