@@ -58,22 +58,24 @@ namespace PdfCreate
             }
         }
 
-        internal bool Get(int sheetNum, List<string> listNeededJpgs, string currentSheet)
+        internal bool Get(int sheetNum, List<string> listNeededJpgs, ref string nameSheet)
         {
             Excel.Worksheet ObjWorkSheet;
             try
             {
                 ObjWorkSheet = (Excel.Worksheet)_workbook.Sheets[sheetNum];
-                currentSheet = ObjWorkSheet.Name;
-                string data;
+                nameSheet = ObjWorkSheet.Name;
+                object data;
+                string nakl;
                 int i = 11;
                 while (true)
                 {
-                    char[] separators = new char[] { ' ', '.' , 'Д'};
-                    data = ObjWorkSheet.Cells[i, "F"];
-                    if (!string.IsNullOrEmpty(data))
+                    char[] separators = new char[] { ' ', '.' , 'Д' };
+                    data = ObjWorkSheet.Cells[i, "F"].Formula2Local;
+                    nakl = data.ToString();
+                    if (!string.IsNullOrEmpty(nakl))
                     {
-                        string[] num = data.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                        string[] num = nakl.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                         listNeededJpgs.Add(num[0]);
                         i++;
                     }

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aspose.Words;
+using System.Windows.Forms;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace PdfCreate
 {
     /// <summary>
     /// Логика взаимодействия для Main.xaml
     /// </summary>
-    public partial class MainForm : UserControl
+    public partial class MainForm : System.Windows.Controls.UserControl
     {
         private string _excelFilePath;
         private string _folderPath;
@@ -42,7 +45,7 @@ namespace PdfCreate
                 // Our final value is in path
                 _folderPath = path;
 
-                FileName.Text = _folderPath;
+                CatalogName.Text = _folderPath;
             }
         }
 
@@ -72,12 +75,19 @@ namespace PdfCreate
             }
         }
 
-        void ProgramLogic(string[] args)
+        void DrawImage(XGraphics gfx, string jpegSamplePath, int x, int y, int width, int height)
+        {
+            XImage image = XImage.FromFile(jpegSamplePath);
+            gfx.DrawImage(image, x, y, width, height);
+        }
+
+        private void ProgramLogic(object sender, RoutedEventArgs e)
         {
             string catalog = _folderPath, file = _excelFilePath, currentSheet = null;
             int n = 0;
             List<string> listNeededJpgs = new List<string>();
             List<List<string>> listOfPJpgs = new List<List<string>>();
+            var fileNames = new List<string> { };
 
             foreach (string findedFile in Directory.EnumerateFiles(catalog, "*.jpg*", SearchOption.AllDirectories))
             {
@@ -98,44 +108,66 @@ namespace PdfCreate
 
             try
             {
-                var doc = new Document();
-                var builder = new DocumentBuilder(doc);
                 using (ExcelHelper helper = new ExcelHelper())
                 {
                     if (helper.Open(filePath: file))
                     {
                         int i = 1;
+                        int flag = 2;
                         while (true)
                         {
+                            var document = new PdfDocument();
+
                             try
                             {
-                                helper.Get(sheetNum: i, listNeededJpgs, currentSheet);
-                                var fileNames = new List<string> { };
+                                listNeededJpgs.Clear();
+                                fileNames.Clear();
+                                if (!helper.Get(sheetNum: i, listNeededJpgs, ref currentSheet)) break;
 
                                 foreach (string need in listNeededJpgs)
                                 {
-                                    for (int j = 0; j <= n; j++)
+                                    for (int j = 0; j < n; j++)
                                     {
-                                        if(need == listOfPJpgs[j][0])
+                                        if (need == listOfPJpgs[j][0])
                                         {
                                             fileNames.Add(listOfPJpgs[j][1]);
                                             break;
                                         }
+                                        if (j == n - 1 && flag ==2)
+                                        {
+                                            var result = System.Windows.Forms.MessageBox.Show("Не все сканы доступны для объединения. Вы хотите продолжть в любом случае? ", "Недостаточно файлов",
+                                                                    MessageBoxButtons.YesNo,
+                                                                    MessageBoxIcon.Question);
+                                            if (result == DialogResult.No)
+                                            {
+                                                flag = 0;
+                                                break;
+                                            } else flag = 1;
+                                        }
                                     }
+                                    if (flag == 0) break;   
                                 }
-
-                                foreach (string fileName in fileNames)
-                                {
-                                    builder.InsertImage(fileName);
-                                    builder.Writeln();
-                                }
-
-                                doc.Save(currentSheet + ".pdf");
-
                             }
                             catch (Exception ex) { Console.WriteLine(ex.Message); break; }
+                            if (flag != 0)
+                            {
+                                foreach (string fileName in fileNames)
+                                {
+                                    var page = document.AddPage();
+                                    XGraphics gfx = XGraphics.FromPdfPage(page);
+                                    DrawImage(gfx, fileName, 0, 0, (int)page.Width, (int)page.Height);
+                                }
+                            }
+                            else break;
+
+                            if (document.PageCount > 0) document.Save(currentSheet + ".pdf");
+                            i++;
+
                         }
                         helper.Save();
+                        var result1 = System.Windows.Forms.MessageBox.Show("Файлы pdf вы можете найти в папке с программой. ", "Готово",
+                                                                    MessageBoxButtons.OK,
+                                                                    MessageBoxIcon.Information);
                     }
                 }
             }

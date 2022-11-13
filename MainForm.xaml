@@ -7,9 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Content="Выберите файл эксель" HorizontalAlignment="Left" Margin="53,205,0,0" VerticalAlignment="Top" Width="338" Height="155" RenderTransformOrigin="0.479,0.506" Click="Button_Click"/>
-        <TextBox Name="FileName" HorizontalAlignment="Left" Height="62" Margin="190,95,0,0" TextWrapping="Wrap" Text="Выбранный файл" VerticalAlignment="Top" Width="437"/>
-        <Button Content="Выбрать папку изображений" HorizontalAlignment="Left" Margin="435,205,0,0" VerticalAlignment="Top" Width="338" Height="155" RenderTransformOrigin="0.479,0.506" Click="Folder_Dialog"/>
+        <Button Content="Выберите файл эксель" HorizontalAlignment="Left" Margin="32,28,0,0" VerticalAlignment="Top" Width="279" Height="108" RenderTransformOrigin="0.479,0.506" Click="Button_Click"/>
+        <TextBox Name="FileName" HorizontalAlignment="Left" Height="62" Margin="336,51,0,0" TextWrapping="Wrap" Text="Выбранный файл" VerticalAlignment="Top" Width="437"/>
+        <Button Content="Выбрать папку изображений" HorizontalAlignment="Left" Margin="32,198,0,0" VerticalAlignment="Top" Width="279" Height="108" RenderTransformOrigin="0.479,0.506" Click="Folder_Dialog"/>
+        <TextBox x:Name="CatalogName" HorizontalAlignment="Left" Height="62" Margin="336,221,0,0" TextWrapping="Wrap" Text="Выбранный каталог" VerticalAlignment="Top" Width="437"/>
+        <Button Content="Продолжить" HorizontalAlignment="Center" Margin="0,381,0,0" VerticalAlignment="Top" Width="154" Height="41" RenderTransformOrigin="0.479,0.506" Click="ProgramLogic"/>
 
     </Grid>
 </UserControl>
