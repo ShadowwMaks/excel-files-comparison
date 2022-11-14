@@ -17,6 +17,7 @@ namespace PdfCreate
     {
         private string _excelFilePath;
         private string _folderPath;
+        private string _saveFolder;
 
         public MainForm()
         {
@@ -25,19 +26,19 @@ namespace PdfCreate
         
         private void Folder_Dialog(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory; // Use current value for initial dir
-            dialog.Title = "Выберите папку с изображениями"; // instead of default "Save As"
+            var dialog = new FolderBrowserDialog();
+            /*dialog.RootFolder = Environment.CurrentDirectory; // Use current value for initial dir
+            dialog. = "Выберите папку с изображениями"; // instead of default "Save As"
             dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
-            dialog.FileName = "select"; // Filename will then be "select.this.directory"
+            dialog.FileName = "select"; // Filename will then be "select.this.directory"*/
 
-            if (dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                string path = dialog.FileName;
-                // Remove fake filename from resulting path
+                string path = dialog.SelectedPath;
+                /*// Remove fake filename from resulting path
                 path = path.Replace("\\select.this.directory", "");
                 path = path.Replace(".this.directory", "");
-                // If user has changed the filename, create the new directory
+                // If user has changed the filename, create the new directory*/
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -99,7 +100,8 @@ namespace PdfCreate
                     listOfPJpgs[n].Add(" ");
                     listOfPJpgs[n].Add(" ");
                     string[] names = FI.Name.Split(' ', '.');
-                    listOfPJpgs[n][0] = names[1];
+                    int ab = names.Length - 2;
+                    listOfPJpgs[n][0] = names[ab];
                     listOfPJpgs[n][1] = FI.FullName;
                     n++;
                 }
@@ -160,18 +162,44 @@ namespace PdfCreate
                             }
                             else break;
 
-                            if (document.PageCount > 0) document.Save(currentSheet + ".pdf");
+                            if (document.PageCount > 0) document.Save(_saveFolder + "\\" + currentSheet + ".pdf");
                             i++;
 
                         }
                         helper.Save();
-                        var result1 = System.Windows.Forms.MessageBox.Show("Файлы pdf вы можете найти в папке с программой. ", "Готово",
+                        var result1 = System.Windows.Forms.MessageBox.Show("Файлы pdf вы можете найти в выбранной папке.", "Готово",
                                                                     MessageBoxButtons.OK,
                                                                     MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
+        }
+
+        private void Save_Folder(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            /*dialog.RootFolder = Environment.CurrentDirectory; // Use current value for initial dir
+            dialog. = "Выберите папку с изображениями"; // instead of default "Save As"
+            dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
+            dialog.FileName = "select"; // Filename will then be "select.this.directory"*/
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = dialog.SelectedPath;
+                /*// Remove fake filename from resulting path
+                path = path.Replace("\\select.this.directory", "");
+                path = path.Replace(".this.directory", "");
+                // If user has changed the filename, create the new directory*/
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                // Our final value is in path
+                _saveFolder = path;
+
+                SaveFolder.Text = _saveFolder;
+            }
         }
     }
 }

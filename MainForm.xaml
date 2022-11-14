@@ -5,13 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PdfCreate"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="230" d:DesignWidth="560">
     <Grid>
-        <Button Content="Выберите файл эксель" HorizontalAlignment="Left" Margin="32,28,0,0" VerticalAlignment="Top" Width="279" Height="108" RenderTransformOrigin="0.479,0.506" Click="Button_Click"/>
-        <TextBox Name="FileName" HorizontalAlignment="Left" Height="62" Margin="336,51,0,0" TextWrapping="Wrap" Text="Выбранный файл" VerticalAlignment="Top" Width="437"/>
-        <Button Content="Выбрать папку изображений" HorizontalAlignment="Left" Margin="32,198,0,0" VerticalAlignment="Top" Width="279" Height="108" RenderTransformOrigin="0.479,0.506" Click="Folder_Dialog"/>
-        <TextBox x:Name="CatalogName" HorizontalAlignment="Left" Height="62" Margin="336,221,0,0" TextWrapping="Wrap" Text="Выбранный каталог" VerticalAlignment="Top" Width="437"/>
-        <Button Content="Продолжить" HorizontalAlignment="Center" Margin="0,381,0,0" VerticalAlignment="Top" Width="154" Height="41" RenderTransformOrigin="0.479,0.506" Click="ProgramLogic"/>
-
+        <Button Content="Файл Excel" HorizontalAlignment="Left" Margin="15,60,0,0" VerticalAlignment="Top" Width="130" Click="Button_Click"/>
+        <Button Content="Папка со сканами" HorizontalAlignment="Left" Margin="15,100,0,0" VerticalAlignment="Top" Width="130" Click="Folder_Dialog"/>
+        <Button x:Name="Continue" HorizontalAlignment="Left" VerticalAlignment="Top" Width="496" Margin="31,182,0,0" Height="27" Content="Продолжить" Click="ProgramLogic"/>
+        <TextBlock HorizontalAlignment="Left" Margin="145,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="268" FontSize="24" Text="Выберите файл и папки"/>
+        <TextBlock Name="FileName" HorizontalAlignment="Left" Margin="152,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="398" Height="22"/>
+        <TextBlock Name="CatalogName" HorizontalAlignment="Left" Margin="152,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="398" Height="22"/>
+        <Button Content="Папка сохранения" HorizontalAlignment="Left" Margin="15,140,0,0" VerticalAlignment="Top" Width="130" Click="Save_Folder"/>
+        <TextBlock Name="SaveFolder" HorizontalAlignment="Left" Margin="152,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="398" Height="22"/>
     </Grid>
 </UserControl>
