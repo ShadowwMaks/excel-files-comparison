@@ -10,7 +10,7 @@ namespace PdfCreate
     {
         private Application _excel;
         private Workbook _workbook;
-        private string _filePath;
+        private readonly string _filePath;
 
         public ExcelHelper() 
         {
@@ -60,7 +60,7 @@ namespace PdfCreate
 
         internal bool Get(int sheetNum, List<string> listNeededJpgs, ref string nameSheet)
         {
-            Excel.Worksheet ObjWorkSheet;
+            Worksheet ObjWorkSheet;
             try
             {
                 ObjWorkSheet = (Excel.Worksheet)_workbook.Sheets[sheetNum];
