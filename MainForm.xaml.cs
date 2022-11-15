@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace PdfCreate
 {
     /// <summary>
     /// Логика взаимодействия для Main.xaml
     /// </summary>
-    public partial class MainForm : System.Windows.Controls.UserControl
+    public partial class MainForm : Window
     {
         private string _excelFilePath;
         private string _folderPath;
@@ -32,22 +30,28 @@ namespace PdfCreate
             dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
             dialog.FileName = "select"; // Filename will then be "select.this.directory"*/
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
             {
-                string path = dialog.SelectedPath;
-                /*// Remove fake filename from resulting path
-                path = path.Replace("\\select.this.directory", "");
-                path = path.Replace(".this.directory", "");
-                // If user has changed the filename, create the new directory*/
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                // Our final value is in path
-                _folderPath = path;
-
-                CatalogName.Text = _folderPath;
+                return;
             }
+
+            string path = dialog.SelectedPath;
+            /*// Remove fake filename from resulting path
+            path = path.Replace("\\select.this.directory", "");
+            path = path.Replace(".this.directory", "");
+            // If user has changed the filename, create the new directory*/
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            // Our final value is in path
+            _folderPath = path;
+            if (_excelFilePath != null)
+            {
+                Continue.IsEnabled = true;
+            }
+
+            CatalogName.Text = _folderPath;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -66,14 +70,21 @@ namespace PdfCreate
 
 
             // Get the selected file name and display in a TextBox 
-            if (result == true)
+            if (result != true)
             {
-                // Open document 
-                string filename = dlg.FileName;
-                _excelFilePath = filename;
-
-                FileName.Text = _excelFilePath;
+                return;
             }
+
+            // Open document 
+            string filename = dlg.FileName;
+            _excelFilePath = filename;
+
+            if (_folderPath != null)
+            {
+                Continue.IsEnabled = true;
+            }
+
+            FileName.Text = _excelFilePath;
         }
 
         void DrawImage(XGraphics gfx, string jpegSamplePath, int x, int y, int width, int height)
@@ -84,6 +95,7 @@ namespace PdfCreate
 
         private void ProgramLogic(object sender, RoutedEventArgs e)
         {
+            this.Save_Folder();
             string catalog = _folderPath, file = _excelFilePath, currentSheet = null;
             int n = 0;
             List<string> listNeededJpgs = new List<string>();
@@ -140,7 +152,7 @@ namespace PdfCreate
                                             var result = System.Windows.Forms.MessageBox.Show("Не все сканы доступны для объединения. Вы хотите продолжть в любом случае? ", "Недостаточно файлов",
                                                                     MessageBoxButtons.YesNo,
                                                                     MessageBoxIcon.Question);
-                                            if (result == DialogResult.No)
+                                            if (result == System.Windows.Forms.DialogResult.No)
                                             {
                                                 flag = 0;
                                                 break;
@@ -176,7 +188,7 @@ namespace PdfCreate
             catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
-        private void Save_Folder(object sender, RoutedEventArgs e)
+        private void Save_Folder()
         {
             var dialog = new FolderBrowserDialog();
             /*dialog.RootFolder = Environment.CurrentDirectory; // Use current value for initial dir
@@ -184,7 +196,7 @@ namespace PdfCreate
             dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
             dialog.FileName = "select"; // Filename will then be "select.this.directory"*/
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = dialog.SelectedPath;
                 /*// Remove fake filename from resulting path
@@ -198,7 +210,7 @@ namespace PdfCreate
                 // Our final value is in path
                 _saveFolder = path;
 
-                SaveFolder.Text = _saveFolder;
+                // SaveFolder.Text = _saveFolder;
             }
         }
     }
